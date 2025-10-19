@@ -396,9 +396,8 @@ class FileController {
   void changeSortStyle(SortBy sort, {bool? isLocal, bool ascending = true}) {
     sortBy.value = sort;
     sortAscending = ascending;
-    directory.update((dir) {
-      dir?.changeSortStyle(sort, ascending: ascending);
-    });
+    directory.value.changeSortStyle(sort, ascending: ascending);
+    directory.refresh();
   }
 
   Future<void> refresh() async {
@@ -428,7 +427,7 @@ class FileController {
     }
     try {
       final fd = await fileFetcher.fetchDirectory(path, isLocal, showHidden);
-      fd.format(isWindows, sort: sortBy.value);
+      fd.format(isWindows, sort: sortBy.value, ascending: sortAscending);
       directory.value = fd;
     } catch (e) {
       debugPrint("Failed to openDirectory $path: $e");
@@ -1314,12 +1313,12 @@ class FileDirectory {
   }
 
   // generate full path for every entry , init sort style if need.
-  format(bool isWindows, {SortBy? sort}) {
+  format(bool isWindows, {SortBy? sort, bool ascending = true}) {
     for (var entry in entries) {
       entry.path = PathUtil.join(path, entry.name, isWindows);
     }
     if (sort != null) {
-      changeSortStyle(sort);
+      changeSortStyle(sort, ascending: ascending);
     }
   }
 
