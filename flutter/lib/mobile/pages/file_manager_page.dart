@@ -591,7 +591,7 @@ class _FileManagerViewState extends State<FileManagerView> {
   }
 
   Widget headTools() {
-    return Obx(() => Container(
+    return Container(
           child: Row(
             children: [
               Expanded(child: Obx(() {
@@ -654,7 +654,7 @@ class _FileManagerViewState extends State<FileManagerView> {
               )
             ],
           ),
-        ));
+        );
   }
 
   Widget listTail() => Obx(() => Container(
